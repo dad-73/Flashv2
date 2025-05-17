@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flash Games Hub</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Flash Games Hub</h1>
+    <p>Select a game to start playing:</p>
+  </header>
+  <main>
+    <div class="game-grid" id="gameGrid">
+      <!-- Icons will be injected here -->
+    </div>
+  </main>
+  <script src="js/ruffle.js"></script>
+  <script>
+    // Array of games with icon files
+    const games = [
+      { name: "Tank Trouble", file: "games/Tank_Trouble.swf", icon: "icons/TankTrouble.jpg" },
+      { name: "Super Mario 63", file: "games/supermario63.swf", icon: "icons/Mario63.png" },
+      { name: "G-Switch", file: "games/G-Switch.swf", icon: "icons/g-switch.png" }
+      // add more games here
+    ];
+
+    const grid = document.getElementById('gameGrid');
+    games.forEach(game => {
+      const link = document.createElement('a');
+      link.href = `game.html?file=${encodeURIComponent(game.file)}`;
+      link.className = 'game-card';
+
+      const img = document.createElement('img');
+      img.src = game.icon;
+      img.alt = `${game.name} icon`;
+      img.className = 'game-icon';
+
+      const caption = document.createElement('div');
+      caption.textContent = game.name;
+      caption.className = 'game-label';
+
+      link.appendChild(img);
+      link.appendChild(caption);
+      grid.appendChild(link);
+    });
+  </script>
+</body>
+</html>

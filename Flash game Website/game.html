@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Play Flash Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1 id="gameTitle">Loading...</h1>
+    <a href="index.html" class="back-link">← Back to Home</a>
+  </header>
+  <main>
+    <div id="gameContainer" class="game-container"></div>
+    <button id="fullscreenBtn" class="fullscreen-btn">Full Screen</button>
+  </main>
+  <script src="js/ruffle.js"></script>
+  <script>
+    function getQueryParam(name) {
+      return new URLSearchParams(window.location.search).get(name);
+    }
+    const file = getQueryParam('file');
+    const container = document.getElementById('gameContainer');
+    const title = document.getElementById('gameTitle');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+    const gamesList = [
+      { file: "games/Tank_Trouble.swf", name: "Tank Trouble" },
+      { file: "games/supermario63.swf", name: "Super Mario 63" },
+      { file: "games/G-Switch.swf", name: "G-Switch" }
+      // keep in sync with index.js
+    ];
+    const gameInfo = gamesList.find(g => g.file === file);
+    title.textContent = gameInfo ? gameInfo.name : 'Unknown Game';
+
+    if (window.RufflePlayer) {
+      const ruffle = window.RufflePlayer.newest();
+      const player = ruffle.createPlayer();
+      // If G-Switch, expand to fill container
+      if (gameInfo && gameInfo.name === 'G-Switch') {
+        player.style.width = '54.5%';
+        player.style.height = '72%';
+      } else {
+        player.style.width = '800px';
+        player.style.height = '600px';
+      }
+      container.appendChild(player);
+      player.load(file);
+
+      // full-screen toggle
+      fullscreenBtn.addEventListener('click', () => {
+        if (container.requestFullscreen) {
+          container.requestFullscreen();
+        } else if (container.webkitRequestFullscreen) {
+          container.webkitRequestFullscreen();
+        }
+      });
+    } else {
+      container.innerHTML = '<p>Ruffle failed to load. Please try again later.</p>';
+    }
+  </script>
+</html>
